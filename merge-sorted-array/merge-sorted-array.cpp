@@ -20,6 +20,7 @@ public:
         //     }
         //     m++;
         // }
+        
         while(m > 0 && n > 0)
         {
             if(nums1[m-1] >= nums2[n-1])
@@ -32,8 +33,10 @@ public:
                 nums1[m+n-1] = nums2[n-1];
                 n--;
             }   
-        }    
-        while(n > 0)
+        }
+        // because of its in-place sorting, don't need to consider about n == 0
+        // which means the left over nums1 elements which didn't move already on their pos properly.
+        while(n > 0) // meanse m == 0
         {
             nums1[m+n-1] = nums2[n-1];
             n--;
