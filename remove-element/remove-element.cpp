@@ -1,28 +1,18 @@
 class Solution {
 public:
     int removeElement(vector<int>& nums, int val) {
-        int cnt = 0;
-        int front = 0;
-        int back = nums.size() - 1;
         
-        while(front <= back && back >= 0)
+        // Solution2
+        int ptr = 0;
+        for(int i = 0; i < nums.size(); ++i)
         {
-            if(nums[back] == val)
+            if(nums[i] != val)
             {
-                cnt++;
-                back--;
-                continue;
+                nums[ptr]=nums[i];
+                ptr++;
             }
-            if(nums[front] == val)
-            {
-                int temp = nums[front];
-                nums[front] = nums[back];
-                nums[back] = temp;
-            }
-            else front++;
         }
         
-        
-        return nums.size() - cnt;
+        return ptr;
     }
 };
