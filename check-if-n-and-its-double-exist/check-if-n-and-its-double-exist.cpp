@@ -1,18 +1,27 @@
 class Solution {
 public:
     bool checkIfExist(vector<int>& arr) {
-        for(int i = 0; i < arr.size(); ++i)
+        
+        // Binary search : O(logN)
+        sort(arr.begin(), arr.end());
+        
+        for(int i = arr.size() - 1; i >= 0; --i) 
         {
-            if((arr[i]) % 2 == 0)
+            if(arr[i] % 2 == 0)
             {
                 int key = arr[i] / 2;
-                for(int j = 0; j < arr.size(); ++j)
+                int begin = 0;
+                int end = arr.size() - 1;
+                while(begin <= end)
                 {
-                    if(i == j) continue;
-                    if(arr[j] == key)   return true;
+                    int mid = (begin + end) / 2;
+                    if(arr[mid] == key && mid != i) return true;
+                    else if(key < arr[mid]) end = mid - 1;
+                    else begin = mid + 1;
                 }
             }
         }
+        
         return false;
     }
 };
