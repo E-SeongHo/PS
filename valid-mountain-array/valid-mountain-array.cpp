@@ -2,26 +2,30 @@ class Solution {
 public:
     bool validMountainArray(vector<int>& arr) {
         
+        // Brilliant solution!!
+        
+        // < Mountain Climb >
+        // Two people climb from left and from right separately.
+        // If they are climbing the same mountain,
+        // they will meet at the same point.
+        
+        int front = 0;
+        int back = arr.size()-1;
+        
         if(arr.size() < 3) return false;
-        if(arr[1] < arr[0]) return false;
-        if(arr[arr.size()-1] > arr[arr.size()-2]) return false;
         
-        bool increasing = true;
-        
-        for(int i = 0; i < arr.size()-1; ++i)
+        while(front < arr.size()-2)
         {
-            if(arr[i] == arr[i+1]) return false;
-            if(increasing)
-            {
-                if(arr[i+1] < arr[i])   increasing = false;
-            }
-            else
-            {
-                if(arr[i+1] > arr[i]) return false;
-            }
+            if(arr[front+1] > arr[front]) front++;
+            else break;
+        }
+        while(back > 1)
+        {
+            if(arr[back-1] > arr[back]) back--;
+            else break;
         }
         
-        
-        return true;
+        std::cout << front << " " << back << std::endl;
+        return front == back;
     }
 };
