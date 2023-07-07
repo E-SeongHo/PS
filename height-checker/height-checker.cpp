@@ -13,16 +13,13 @@ public:
         
         for(int i = 0; i < heights.size(); ++i)
         {
-            if(counts[current] > 0)
-            {
-                if(heights[i] != current) cnt++;
-            }
-            else
+            if(!counts[current])
             {
                 current++;
                 i--;
                 continue;
             }
+            if(heights[i] != current) cnt++;
             counts[current]--;
         }
         
