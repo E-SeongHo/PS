@@ -11,9 +11,6 @@ public:
             nums[idx] > 0 ? nums[idx] = -nums[idx] : nums[idx] = nums[idx]; 
         }
         
-        for(auto n : nums) cout << n << " ";
-        cout << endl;
-        
         for(int i = 0; i < nums.size(); ++i)
         {
             if(nums[i] > 0) v.push_back(i + 1);
