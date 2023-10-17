@@ -7,6 +7,10 @@ using namespace std;
 
 int main()
 {
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    
     vector<vector<int>> v;
     string s;
     cin >> s;
@@ -30,7 +34,7 @@ int main()
         char c; 
         int start, end;
         cin >> c >> start >> end;
-        
+
         cout << v[c-'a'][end+1] - v[c-'a'][start] << "\n";
     }
 
