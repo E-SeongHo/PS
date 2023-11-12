@@ -6,11 +6,16 @@ using namespace std;
 int N;
 vector<vector<pair<int, int>>> adjList;
 int radius = 0;
+int node = 1;
 
 void DFS(vector<bool>& visited, int current, int weight)
 {
     visited[current] = true;
-    radius = max(weight, radius);
+    if(weight > radius)
+    {
+        radius = weight;
+        node = current;
+    }
 
     for(auto p : adjList[current])
     {
@@ -39,11 +44,12 @@ int main()
         adjList[n2].push_back({n1, w});
     }
 
-    for(int i = 1; i < N+1; ++i)
-    {
-        vector<bool> visited(N+1);
-        DFS(visited, i, 0);
-    }
+    vector<bool> visited(N+1);
+    DFS(visited, 1, 0);
+
+    fill(visited.begin(), visited.end(), false);
+    DFS(visited, node, 0);
+
 
     cout << radius;
 }
