@@ -8,39 +8,37 @@ int N, M;
 vector<pair<int, int>> chickens;
 vector<pair<int, int>> houses;
 vector<vector<int>> mDist;
-int ans = 987654321;
+int ans = 2e9;
 
-void Func(vector<int>& stores, vector<bool>& visited)
+int ChickenDist(vector<int>& stores)
+{
+    int dists = 0;
+    for(int i = 0; i < houses.size(); ++i)
+    {
+        int dist = 2e9;
+        for(auto idx : stores)
+        {
+            dist = min(mDist[i][idx], dist);
+        }
+        dists += dist;
+    }
+    return dists;
+}
+
+void Select(vector<int>& stores, int ptr)
 {
     if(stores.size() == M)
     {   
-        int dists = 0;
-        for(int i = 0; i < houses.size(); ++i)
-        {
-            int dist = 987654321;
-            for(auto idx : stores)
-            {
-                dist = min(mDist[i][idx], dist);
-            }
-            dists += dist;
-        }
-        ans = min(ans, dists);
+        int dist = ChickenDist(stores);
+        ans = min(ans, dist);
         return;
     }   
-
-    for(int i = 0; i < chickens.size(); ++i)
+    for(int i = ptr; i < chickens.size(); ++i)
     {   
-        if(!stores.empty() && stores.back() > i) continue;
-        if(!visited[i]) 
-        {
-            stores.push_back(i);
-            visited[i] = true;
-            Func(stores, visited);
-            stores.pop_back();
-            visited[i] = false;
-        }
+        stores.push_back(i);
+        Select(stores, i+1);
+        stores.pop_back();
     }
-
 }
 
 int main()
@@ -60,6 +58,7 @@ int main()
         }
     }
     
+    // pre calc
     mDist.resize(houses.size(), vector<int>(chickens.size()));
     for(int i = 0; i < houses.size(); ++i)
     {
@@ -72,10 +71,8 @@ int main()
         }
     }
 
-
     vector<int> stores;
-    vector<bool> visited(chickens.size());
-    Func(stores, visited);
+    Select(stores, 0);
     
     cout << ans;
     return 0;
