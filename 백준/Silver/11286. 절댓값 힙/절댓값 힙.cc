@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <queue>
 
 using namespace std;
 
@@ -65,17 +66,37 @@ private:
     vector<int> m_data;
 };
 
+struct Compare
+{
+    bool operator()(const int e1, const int e2)
+    {
+        if(abs(e1) == abs(e2)) return e1 > e2;
+        else return abs(e1) > abs(e2);
+    }
+};
+
 int main()
 {
+
     int N;
     cin >> N;
-    Heap absHeap(N);
+    //Heap absHeap(N);
+
+    priority_queue<int, vector<int>, Compare> absHeap;
 
     for(int i = 0; i < N; ++i)
     {
         int command;
         cin >> command;
-        if(command == 0) cout << absHeap.pop() << "\n";
+        if(command == 0) 
+        {
+            if(absHeap.empty()) cout << 0 << "\n";
+            else 
+            {
+                cout << absHeap.top() << "\n";
+                absHeap.pop();
+            }
+        }
         else
             absHeap.push(command);
     }
