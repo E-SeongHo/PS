@@ -2,46 +2,36 @@ class Solution
 {
 public:
     int trap(vector<int>& height) 
-    {
-        stack<int> st;
-        int left = height[0];
-        st.push(left);
-
-        int water = 0;
-        for(int i = 1; i < height.size(); i++)
-        {
-            if(height[i] >= left)
-            {
-                while(!st.empty())
-                {
-                    int block = st.top();
-                    st.pop();
-                    water += left - block;
-                }
-                left = height[i];
-            }
-            st.push(height[i]);
-        }
+    {        
+        // Solution2) Two pointers approach
         
-        // process left overs
-        int right = st.top(); 
-        st.pop();
+        int lp = 0; 
+        int rp = height.size()-1;
+        int left = height[lp];
+        int right = height[height.size()-1];
         int sum = 0;
-        while(!st.empty())
+        
+        while(lp < rp)
         {
-            int block = st.top();
-            st.pop();
-            if(block < right)
+            if(height[lp] <= height[rp])
             {
-                sum += right - block;
+                if(height[lp] <= left) sum += left - height[lp];
+                else left = height[lp];
+                
+                lp++;
             }
             else
             {
-                water += sum;
-                sum = 0;
-                right = block;
+                if(height[rp] <= height[lp])
+                {
+                    if(height[rp] <= right) sum += right - height[rp];
+                    else right = height[rp];
+                    
+                    rp--;
+                }
             }
         }
-        return water;
+        return sum;
+        
     }
 };
