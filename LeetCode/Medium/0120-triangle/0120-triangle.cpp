@@ -2,21 +2,19 @@ class Solution {
 public:
     int minimumTotal(vector<vector<int>>& triangle) {
         
-        for(int i = 1; i < triangle.size(); i++)
+        // revised)  simpler tabulation (from the bottom)
+        // Idea : paths are the same from top to bottom and from bottom to top
+        for(int i = triangle.size()-2; i >= 0; i--)
         {
             for(int j = 0; j < triangle[i].size(); j++)
             {
                 auto& current = triangle[i][j];
-                int l = max(0, j-1);
-                int r = min((int)triangle[i-1].size()-1, j);
+                auto& bottomLine = triangle[i+1];
                 
-                current = min(current + triangle[i-1][l], current + triangle[i-1][r]);
+                current += min(bottomLine[j], bottomLine[j+1]);
             }
         }
         
-        auto& lastLine = triangle[triangle.size()-1];
-        int minE = *min_element(lastLine.begin(), lastLine.end());
-        
-        return minE;
+        return triangle[0][0];
     }
 };
