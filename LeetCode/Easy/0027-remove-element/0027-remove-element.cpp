@@ -11,8 +11,6 @@ public:
                 cnt++;
             }
             
-            for(auto n : nums) cout << n << " ";
-            cout << endl;                
         }
         
         return nums.size() - cnt;
