@@ -14,7 +14,6 @@ public:
     TreeNode* invertTree(TreeNode* root) {
         
         if(root == nullptr) return root;
-        if(root->left == nullptr && root->right == nullptr) return root;
 
         invertTree(root->left);
         invertTree(root->right);
