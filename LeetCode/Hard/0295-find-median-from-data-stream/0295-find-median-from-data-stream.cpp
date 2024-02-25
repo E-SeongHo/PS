@@ -1,53 +1,33 @@
 class MedianFinder {
 public:
-    multiset<int> balancedBST;
-    multiset<int>::iterator mid;
-
+    priority_queue<int, vector<int>, less<int>> maxHeap;
+    priority_queue<int, vector<int>, greater<int>> minHeap;
+    
     MedianFinder() {
     }
     
     void addNum(int num) {
-        // O(2logN) 
+        maxHeap.push(num);
+        minHeap.push(maxHeap.top());
+        maxHeap.pop();
 
-        // O(logN)
-        balancedBST.insert(num);
-        if(balancedBST.size() == 1) 
+        if(minHeap.size() > maxHeap.size())
         {
-            mid = balancedBST.begin();
-            print();
-            cout << distance(balancedBST.begin(), mid) << " " << *mid << endl;
-            return;
+            maxHeap.push(minHeap.top());
+            minHeap.pop();
         }
-
-        // O(logN)
-        if(num >= *mid) // since set.begin() moves, divide the cases.
-        {   // 1) inserted to right subtree
-            if(balancedBST.size() % 2 == 1) mid++;
-        }
-        else
-        {   // 2) inserted to left subtree
-            if(balancedBST.size() % 2 == 0) mid--;
-        }
-       
     }
     
     double findMedian() {
-        // O(1)
-        int size = balancedBST.size();
-        auto it = mid;
-        if(size % 2 == 0) return (*it++ + *it) / 2.0;
-        else return *it;
+        
+        int size = maxHeap.size() + minHeap.size();
+
+        if(size % 2 == 0)
+            return (maxHeap.top() + minHeap.top()) / 2.0;
+        else 
+            return maxHeap.top();
     }
 
-    void print()
-    {
-        cout << "print : ";
-        for(auto n : balancedBST)
-        {
-            cout << n << " ";
-        }
-        cout << endl;
-    }
 };
 
 /**
