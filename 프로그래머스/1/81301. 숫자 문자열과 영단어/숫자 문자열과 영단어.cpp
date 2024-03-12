@@ -15,28 +15,23 @@ int solution(string s) {
     string temp = "";
     for(int i = 0; i < s.size(); i++)
     {
-        if(temp != "")
-        {
-            if(table.find(temp) != table.end())
-            {
-                answer *= 10;
-                answer += table[temp];   
-                temp = "";
-            }
-        }
-        if(s[i] >= '0' && s[i] <= '9') 
+        if(isdigit(s[i])) 
         {
             answer *= 10;
             answer += s[i] - '0';
         }
-        else temp += s[i];
+        else 
+        {
+            temp += s[i];
+            if(table.find(temp) != table.end())
+            {
+                answer *= 10;
+                answer += table[temp];
+                temp.clear();
+            }
+        }
     }
-        
-    if(temp != "") 
-    {
-        answer *= 10;
-        answer += table[temp];
-    }
+     
     
     return answer;
 }
