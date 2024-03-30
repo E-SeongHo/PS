@@ -57,7 +57,7 @@ void dfs(pipe current)
     case PipeState::Vertical:
         if(y+2 < N && !house[y+2][x])
             dfs(pipe({{y+1}, x}, PipeState::Vertical));
-        if(y+2 < N && x+1 << N)
+        if(y+2 < N && x+1 < N)
         {
             if(!house[y+2][x] && !house[y+2][x+1] && !house[y+1][x+1])
                 dfs(pipe({{y+1, x}, PipeState::Diagonal}));
@@ -80,15 +80,52 @@ void dfs(pipe current)
 
 int main()
 {
-    cin >> N;
-    house.resize(N, vector<int>(N));
+    // cin >> N;
+    // house.resize(N, vector<int>(N));
 
-    for(int i = 0; i < N; i++)
-        for(int j = 0; j < N; j++)
+    // for(int i = 0; i < N; i++)
+    //     for(int j = 0; j < N; j++)
+    //         cin >> house[i][j];
+
+    // dfs(pipe({{0, 0}, PipeState::Horizontal}));
+
+    // cout << cnt;
+
+
+    // DP
+    cin >> N;
+    house.resize(N+1, vector<int>(N+1));
+
+    for(int i = 1; i < N+1; i++)
+        for(int j = 1; j < N+1; j++)
             cin >> house[i][j];
 
-    dfs(pipe({{0, 0}, PipeState::Horizontal}));
+    vector<vector<int>> dpH(N+1, vector<int>(N+1)); // Horizontal
+    vector<vector<int>> dpV(N+1, vector<int>(N+1)); // Vertical
+    vector<vector<int>> dpD(N+1, vector<int>(N+1)); // Diagonal
 
-    cout << cnt;
+    dpH[1][2] = 1;
+    for(int i = 1; i < N+1; i++)
+    {
+        for(int j = 1; j < N+1; j++)
+        {
+            if(house[i][j]) continue;
+            
+            dpH[i][j] += dpH[i][j-1];
+            dpH[i][j] += dpD[i][j-1];
+
+            dpV[i][j] += dpV[i-1][j];
+            dpV[i][j] += dpD[i-1][j];
+
+            if(!house[i-1][j] && !house[i][j-1])
+            {
+                dpD[i][j] += dpH[i-1][j-1];
+                dpD[i][j] += dpV[i-1][j-1];
+                dpD[i][j] += dpD[i-1][j-1];
+            }
+        }
+    }
+    
+    cout << dpH[N][N] + dpV[N][N] + dpD[N][N];    
     return 0;
 }
