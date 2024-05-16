@@ -1,2 +1,3 @@
-# ProblemSolvingLog
-Logging what I solved
+# PS Logging
+
+Documenting my solutions
