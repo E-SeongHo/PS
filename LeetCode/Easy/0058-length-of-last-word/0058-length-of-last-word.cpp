@@ -41,6 +41,8 @@ public:
     }
     
     int lengthOfLastWord(string s) {
-       return naiveWay(s);
+       
+        // return naiveWay(s);
+        return stringstreamParsing(s);
     }
 };
