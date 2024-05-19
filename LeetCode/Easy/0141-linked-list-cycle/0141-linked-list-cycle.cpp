@@ -18,12 +18,11 @@ public:
         ListNode* tortoise = head;
         ListNode* hare = head;
         
-        while(tortoise != nullptr && hare->next != nullptr)
+        while(hare != nullptr && hare->next != nullptr)
         {   
             tortoise = tortoise->next;
             hare = hare->next->next;
-            if(hare == nullptr) return false;
-            
+         
             if(tortoise == hare) return true;
         }
         
