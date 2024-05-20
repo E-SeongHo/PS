@@ -23,7 +23,6 @@ public:
         while(!q.empty())
         {
             auto p = q.front(); q.pop();
-            cout << p.first << " " << p.second->val << endl;
             
             if(p.first != currentLevel)
             {
