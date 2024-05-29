@@ -1,52 +1,27 @@
 #include <iostream>
 #include <vector>
-#include <cmath>
-#include <algorithm>
-#include <numeric>
 
 using namespace std;
 
-int N; // 1 <= N <= 50,000
-vector<int> SquareTable;
-
-bool lagrangju(vector<int>& v, int current, int limit)
-{
-    if(v.size() == limit)
-    {
-        if(accumulate(v.begin(), v.end(), 0) == N) return true;
-        else return false;
-    }
-    
-    for(int i = current; i < SquareTable.size(); i++)
-    {
-        v.push_back(SquareTable[i]);
-        if(lagrangju(v, i, limit)) return true;
-        v.pop_back();
-    }
-
-    return false;
-}
+int N;
+vector<int> dp;
 
 int main()
 {
     cin >> N;
-    SquareTable.resize(sqrt(N) + 1);
+    dp.resize(N+1);
+    std::fill(dp.begin(), dp.end(), 99999);
 
-    for(int i = 1; i < SquareTable.size(); i++)
+    dp[0] = 0;
+    for(int i = 1; i < dp.size(); i++)
     {
-        SquareTable[i] = i * i;
-    }
-
-    for(int i = 1; i <= 4; i++)
-    {
-        vector<int> v;
-        v.reserve(i);
-        if(lagrangju(v, 1, i)) 
+        for(int j = 1; j * j <= i; j++)
         {
-            cout << i;
-            break;
+            dp[i] = min(dp[i], dp[i-j*j] + 1);
         }
     }
+
+    cout << dp[N];
 
     return 0;
 }
