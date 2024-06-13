@@ -12,7 +12,7 @@ vector<vector<pair<int, int>>> Path;
 void dijkstra(int start, int end)
 {
     using tup = tuple<long long, int, int>;
-    priority_queue<tup, vector<tup>, less<tup>> pq;
+    priority_queue<tup, vector<tup>, greater<tup>> pq;
 
     long long inf = numeric_limits<long long>::max();
     vector<pair<long long, int>> visited(N+1, {inf, -1});
