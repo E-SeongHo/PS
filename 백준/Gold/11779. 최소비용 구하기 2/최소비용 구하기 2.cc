@@ -24,7 +24,7 @@ void dijkstra(int start, int end)
     {
         auto [cost, node, prev] = pq.top(); pq.pop();
 
-        //if(node == end) break;
+        if(node == end) break;
         if(visited[node].first < cost) continue; 
 
         for(auto [next, weight] : Path[node])
