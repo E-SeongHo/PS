@@ -22,16 +22,18 @@ int main()
     }
 
     int ptr = 0;
-    int qtr = 0;
-    int sum = V[0];
+    int qtr = -1;
+    int sum = 0;
     int len = SENTINAL;
 
     while(qtr < N)
     {
-        //cout << V[ptr] << " " << V[qtr] << " " << sum << " " << len << endl;
         if(sum < S)
         {
-            sum += V[++qtr];
+            // sum += V[++qtr] // array index 
+            if(++qtr >= N) break;
+
+            sum += V[qtr];
         }
         else
         {
