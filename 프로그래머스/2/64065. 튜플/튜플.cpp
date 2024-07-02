@@ -3,10 +3,52 @@
 #include <sstream>
 #include <iostream>
 #include <algorithm>
+#include <map>
 
 using namespace std;
 
+vector<int> solution2(string s)
+{
+    stringstream sstream(s);
+    string buffer;
+    
+    map<int, int> cnts;
+    while(getline(sstream, buffer, '}'))
+    {
+        if(buffer.empty()) break;
+        
+        int idx = 0;
+        while(!isdigit(buffer[idx++])) {}
+        
+        stringstream sub_stream(buffer.substr(idx-1));
+        string sub_buffer;
+        
+        while(getline(sub_stream, sub_buffer, ','))
+        {
+            cnts[stoi(sub_buffer)]++;
+        }
+    }
+    
+    vector<pair<int, int>> v;
+    for(auto m : cnts)
+    {
+        v.push_back({m.second, m.first});
+    }
+    
+    sort(v.begin(), v.end());
+    
+    vector<int> answer;
+    for(auto it = v.rbegin(); it != v.rend(); ++it)
+    {
+        answer.push_back(it->second);
+    }
+    
+    return answer;
+}
+
 vector<int> solution(string s) {
+    
+    return solution2(s);
     
     stringstream sstream(s);
     string buffer;
