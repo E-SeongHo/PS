@@ -21,26 +21,6 @@ bool available(string& vanila, string& banned)
     return true;
 }
 
-// bool contain(set<string>& candidate)
-// {
-//     for(auto s : ret)
-//     {
-//         if(s.size() != candidate.size()) continue;
-        
-//         bool same = true;
-//         for(auto id : s)
-//         {
-//             if(candidate.find(id) == candidate.end()) 
-//             {
-//                 same = false;
-//                 break;
-//             }
-//         }
-//         if(same) return true;
-//     }
-    
-//     return false;
-// }
 void dfs(vector<vector<string>>& availables, vector<string>& v, int depth)
 {
     if(depth == availables.size())
