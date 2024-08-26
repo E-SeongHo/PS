@@ -1,58 +1,36 @@
 #include <iostream>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
-using p = pair<int, int>;
 
-int N, K;
-vector<p> items;
-vector<vector<int>> dp;
-
-void Print()
-{
-    for(int i = 0; i < N+1; ++i)
-    {
-        for(int j = 0; j < K+1; ++j)
-        {
-            cout << dp[i][j] << " ";
-        }
-        cout << endl;
-    }
-}
-
+int N, K, W, V;
 int main()
 {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr); 
+
     cin >> N >> K;
-    items.reserve(N+1);
-    dp.resize(N+1, vector<int>(K+1));
-
-    items.push_back({0, 0});
-    for(int i = 1; i < N+1; ++i)
+    vector<pair<int, int>> items(N);
+    for(int i = 0; i < N; ++i)
     {
-        int item, value;
-        cin >> item >> value;
-        items.push_back({item, value});
+        cin >> W >> V;
+        items[i] = {W, V};
     }
 
-    for(int i = 1; i < N+1; ++i)
-    {
-        int weight = items[i].first;
-        int value = items[i].second;
+    sort(items.begin(), items.end());
+    vector<int> dp(K+1);
 
-        //cout << weight << " " << value << endl;
-        for(int j = 1; j < K+1; ++j)
+    dp[0] = 0;
+    for(auto [weight, value] : items)
+    {
+        vector<int> original = dp;
+        for(int i = weight; i < K+1; ++i)
         {
-            if(j - weight >= 0)
-                dp[i][j] = max(dp[i-1][j], value + dp[i-1][j-weight]); 
-
-            else dp[i][j] = max(dp[i][j-1], dp[i-1][j]);
-
+            dp[i] = max(original[i], original[i-weight] + value);
         }
-        
-        //Print();
     }
-    
-    cout << dp[N][K];
 
+    cout << dp[K];
     return 0;
 }
