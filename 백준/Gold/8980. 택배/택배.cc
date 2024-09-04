@@ -25,7 +25,7 @@ int main()
     cin.tie(nullptr);
 
     cin >> N >> C >> M;
-    V.resize(N+1);
+    V.resize(M);
     
     for(int i = 0; i < M; ++i)
     {
