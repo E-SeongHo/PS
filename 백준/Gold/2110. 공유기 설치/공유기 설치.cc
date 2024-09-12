@@ -36,18 +36,19 @@ int main()
 
     sort(Coords.begin(), Coords.end());
 
-    int gap = Coords[N-1] - Coords[0];
-    while(count_availables(gap) < C)
+    int begin = 1;
+    int end = 1000000001;
+
+    while(begin + 1 < end)
     {
-        gap = gap/2;
-    }
-    
-    while(count_availables(gap) >= C)
-    {
-        gap++;
+        int mid = (begin + end) / 2;
+        int cnt = count_availables(mid);
+
+        if(cnt >= C) begin = mid;
+        else end = mid;
     }
 
-    cout << gap-1;
+    cout << begin;
 
     return 0;
 }
