@@ -50,12 +50,16 @@ int main()
     sort(Edges.begin(), Edges.end());
 
     int mst_cost = 0;
+    int cnt = 0;
     for(auto [weight, a, b] : Edges)
     {
         if(find(a) != find(b))
         {
             mst_cost += weight;
             union_set(a, b);
+            cnt++;
+
+            if(cnt == V-1) break;
         }
     }
 
