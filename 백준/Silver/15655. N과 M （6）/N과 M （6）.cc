@@ -36,21 +36,21 @@ int main()
     sort(V.begin(), V.end());
 
     vector<int> v;
-    dfs(0, v);
+    //dfs(0, v);
 
-    // vector<int> mask(N, 1);
-    // for(int i = 0; i < M; ++i)
-    //     mask[i] = 0;
+    vector<int> mask(N, 1);
+    for(int i = 0; i < M; ++i)
+        mask[i] = 0;
 
-    // do
-    // {
-    //     for(int i = 0; i < N; ++i)
-    //     {
-    //         if(!mask[i]) cout << V[i] << " ";
-    //     } 
-    //     cout << '\n';
+    do
+    {
+        for(int i = 0; i < N; ++i)
+        {
+            if(!mask[i]) cout << V[i] << " ";
+        } 
+        cout << '\n';
 
-    // } while (next_permutation(mask.begin(), mask.end()));
+    } while (next_permutation(mask.begin(), mask.end()));
     
 
     return 0;
