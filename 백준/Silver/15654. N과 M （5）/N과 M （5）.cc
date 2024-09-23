@@ -3,56 +3,59 @@
 #include <algorithm>
 
 using namespace std;
-vector<int> arr;
-vector<bool> visited;
 
 int N, M;
+vector<int> V;
 
-void DFS(vector<bool>& visited, vector<int>& v, int depth)
+void dfs(vector<int>& v, vector<int>& issued)
 {
-    if(depth == M)
+    if(v.size() == M)
     {
-        for(auto n : v)
-            cout << n << " ";
-        cout << "\n";
+        for(int n : v) cout << n << " ";
+        cout << '\n';
+
         return;
     }
 
     for(int i = 0; i < N; ++i)
     {
-        if(!visited[i])
+        if(!issued[i])
         {
-            visited[i] = true;
-            v.push_back(arr[i]);
-            DFS(visited, v, depth+1);
+            issued[i] = true;
+            v.push_back(V[i]);
+
+            dfs(v, issued);
+
+            issued[i] = false;
             v.pop_back();
-            visited[i] = false;
         }
     }
 }
+
 int main()
 {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-    cout.tie(nullptr);
-    
     cin >> N >> M;
-    arr.resize(N);
-    visited.resize(N);
+    V.resize(N);
 
     for(int i = 0; i < N; ++i)
-        cin >> arr[i];
+        cin >> V[i];
 
-    sort(arr.begin(), arr.end());
-    
-    for(int i = 0; i < N; ++i)
+    sort(V.begin(), V.end());
+
+    vector<int> v;
+    vector<int> issued(N, 0);
+    //dfs(v, issued);
+
+    do
     {
-        vector<int> route;
-        route.push_back(arr[i]);
-        visited[i] = true;
-        DFS(visited, route, 1);
-        visited[i] = false;
-        route.pop_back();
-    }
+        for(int i = 0; i < M; ++i)
+            cout << V[i] << " ";
+        cout << '\n';
+        
+        reverse(V.begin()+M, V.end());
+
+    } while (next_permutation(V.begin(), V.end()));
+    
+
     return 0;
 }
