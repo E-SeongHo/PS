@@ -1,25 +1,27 @@
 #include <iostream>
 #include <string>
-#include <list>
+#include <vector>
 
 using namespace std;
 
 string S;
-int N;
+int M;
 
 int main()
 {
     ios::sync_with_stdio(false);
     cin.tie(nullptr); cout.tie(nullptr);
 
-    cin >> S >> N;
+    cin >> S >> M;
+    vector<char> left;
+    vector<char> right;
 
-    list<char> l;
-    for(char c : S)
-        l.push_back(c);
-    auto cursor = l.end();
+    left.reserve(S.length());
+    right.reserve(S.length());
 
-    for(int i = 0; i < N; ++i)
+    for(char c : S) left.push_back(c);
+
+    for(int i = 0; i < M; ++i)
     {
         char op, c;
         cin >> op;
@@ -27,23 +29,34 @@ int main()
         switch(op)
         {
         case 'L': 
-            if(cursor != l.begin()) --cursor;
+            if(!left.empty())
+            {
+                right.push_back(left.back());
+                left.pop_back();
+            }
             break;
         case 'D':
-            if(cursor != l.end()) ++cursor;
+            if(!right.empty())
+            {
+                left.push_back(right.back());
+                right.pop_back();
+            }
             break;
         case 'B':
-            if(cursor != l.begin()) cursor = l.erase(--cursor);
+            if(!left.empty())
+            {
+                left.pop_back();
+            }
             break;
         case 'P':
             cin >> c;
-            l.insert(cursor, c);
+            left.push_back(c);
             break;
         }
     }
 
-    for(char c : l)
-        cout << c;
+    for(char c : left) cout << c;
+    for(auto it = right.rbegin(); it != right.rend(); ++it) cout << *it;
 
     return 0;
 }
