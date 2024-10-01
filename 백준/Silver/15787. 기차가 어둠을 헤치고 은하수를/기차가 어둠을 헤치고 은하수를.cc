@@ -43,17 +43,12 @@ int main()
     }
 
     set<unsigned int> s;
-    int ans = 0;
     for(int i = 1; i < N+1; ++i)
     {
-        if(s.find(Trains[i]) == s.end())
-        {
-            ++ans;
-            s.insert(Trains[i]);
-        }
+        s.insert(Trains[i]);
     }
 
-    cout << ans;
+    cout << s.size();
 
     return 0;
 }
