@@ -6,7 +6,7 @@
 using namespace std;
 
 int W, H;
-vector<int> Traps1, Traps2;
+vector<int> Traps;
 
 int main()
 {
@@ -14,32 +14,35 @@ int main()
     cin.tie(nullptr); cout.tie(nullptr);
 
     cin >> W >> H;
-    Traps1.resize(H+1); Traps2.resize(H+1);
+    Traps.resize(H+2);
 
     // Binary Search : O(NlogN + HlogN)
-    // PrefixSum : O(H + N)
+    // PrefixSum : O(H + H)
+    // IMOS : O(H + H)
+
+    // marking
     for(int i = 0; i < W; i+=2)
     {
         int height1, height2;
         cin >> height1 >> height2;
 
-        ++Traps1[height1];
-        ++Traps2[height2];
+        Traps[1]++;
+        Traps[height1+1]--;
+
+        Traps[H - height2+1]++;
+        Traps[H+1]--;
     }
 
+    // sweep
     for(int i = 1; i < H+1; ++i)
     {
-        Traps1[i] += Traps1[i-1];
-        Traps2[i] += Traps2[i-1];
+        Traps[i] += Traps[i-1];
     }
 
     map<int, int> m;
     for(int i = 1; i < H+1; ++i)
     {
-        int cnt1 = Traps1[H] - Traps1[i-1];
-        int cnt2 = Traps2[H] - Traps2[H+1-i-1];
-
-        m[cnt1+cnt2]++;
+        m[Traps[i]]++;
     }
 
     cout << m.begin()->first << " " << m.begin()->second;
