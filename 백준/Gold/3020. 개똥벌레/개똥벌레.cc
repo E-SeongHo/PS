@@ -14,29 +14,33 @@ int main()
     cin.tie(nullptr); cout.tie(nullptr);
 
     cin >> W >> H;
-    Traps1.resize(W/2); Traps2.resize(W/2);
+    Traps1.resize(H+1); Traps2.resize(H+1);
 
-    for(int i = 0; i < W; ++i)
+    // Binary Search : O(NlogN + HlogN)
+    // PrefixSum : O(H + N)
+    for(int i = 0; i < W; i+=2)
     {
-        int height;
-        cin >> height;
+        int height1, height2;
+        cin >> height1 >> height2;
 
-        i % 2 == 0 ? Traps1[i/2] = height : Traps2[i/2] = height;
+        ++Traps1[height1];
+        ++Traps2[height2];
     }
 
-    sort(Traps1.begin(), Traps1.end());
-    sort(Traps2.begin(), Traps2.end());
+    for(int i = 1; i < H+1; ++i)
+    {
+        Traps1[i] += Traps1[i-1];
+        Traps2[i] += Traps2[i-1];
+    }
 
     map<int, int> m;
     for(int i = 1; i < H+1; ++i)
     {
-        int cnt1 = (int)Traps1.size() - (lower_bound(Traps1.begin(), Traps1.end(), i) - Traps1.begin());
-        int cnt2 = (int)Traps2.size() - (lower_bound(Traps2.begin(), Traps2.end(), (H+1 - i)) - Traps2.begin());
+        int cnt1 = Traps1[H] - Traps1[i-1];
+        int cnt2 = Traps2[H] - Traps2[H+1-i-1];
+
         m[cnt1+cnt2]++;
     }
 
-    auto it = m.begin();
-    cout << it->first << " " << it->second;
-
-    return 0;
+    cout << m.begin()->first << " " << m.begin()->second;
 }
