@@ -1,73 +1,97 @@
 #include <iostream>
 #include <vector>
-#include <stack>
 
 using namespace std;
-vector<vector<int>> board(9, vector<int>(9));
-vector<pair<int, int>> blank;
-bool findFlag = false;
 
-bool IsAvailable(int y, int x, int value)
+const int N = 9;
+vector<vector<int>> Board(N, vector<int>(N, 0));
+vector<pair<int, int>> Empty;
+
+bool flag = false;
+void dfs(int dep)
 {
-    // Check y
-    for(int i = 0; i < 9; ++i)
-        if(value == board[y][i]) return false;
-
-    // Check x
-    for(int i = 0; i < 9; ++i)
-        if(value == board[i][x]) return false;
-
-    // Check 3x3 Grid
-    int sy = (y/3) * 3;
-    int sx = (x/3) * 3;
-    for(int j = sy; j < sy+3; ++j)
-        for(int i = sx; i < sx+3; ++i)
-            if(value == board[j][i]) return false;
-
-    return true;
-}
-
-void DFS(int idx)
-{
-    if(idx == blank.size())
+    if(dep == (int)Empty.size()) 
     {
-        findFlag = true;
+        for(int i = 0; i < N; ++i)
+        {
+            for(int j = 0; j < N; ++j)
+            {
+                cout << Board[i][j] << " ";
+            }
+            cout << '\n';
+        }
+        flag = true;
         return;
     }
 
-    auto p = blank[idx];
-    //cout << p.first << " " << p.second << endl;
-
-    for(int n = 1; n < 10; ++n)
+    auto [y, x] = Empty[dep];
+    int vertical = 0;
+    for(int i = 0; i < N; ++i)
     {
-        if(IsAvailable(p.first, p.second, n))
+        if(Board[y][i]) 
         {
-            board[p.first][p.second] = n;
-            DFS(idx + 1);
-            if(findFlag) return;
-            board[p.first][p.second] = 0;
+            vertical |= (1 << (Board[y][i]));
         }
+    }
+
+    int horizontal = 0;
+    for(int i = 0; i < N; ++i)
+    {
+        if(Board[i][x]) 
+        {
+            horizontal |= (1 << (Board[i][x]));
+        }
+    }
+
+    int start_y = 3 * (y / 3);
+    int start_x = 3 * (x / 3);
+    int quad = 0;
+    for(int i = 0; i < 3; ++i)
+    {
+        for(int j = 0; j < 3; ++j)
+        {
+            if(Board[start_y + i][start_x + j]) 
+            {
+                quad |= (1 << (Board[start_y+i][start_x+j]));
+            }
+        }
+    }
+
+    vector<int> candidates;
+    for(int i = 1; i <= N; ++i)
+    {
+        int mask = 1 << i;
+
+        if(!(vertical & mask) && !(quad & mask) && !(horizontal & mask))
+        {
+            candidates.push_back(i);
+        }
+    }    
+
+    for(int n : candidates)
+    {
+        Board[y][x] = n;
+        dfs(dep+1);
+        if(flag) return;
+        Board[y][x] = 0;
     }
 }
 
 int main()
 {
-    for(int j = 0; j < 9; ++j)
-        for(int i = 0; i < 9; ++i)
-        {
-            cin >> board[j][i];
-            if(!board[j][i]) blank.push_back({j, i});
-        }
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr); cout.tie(nullptr);
 
-    DFS(0);
-
-    cout << endl;
-    for(int j = 0; j < 9; ++j)
+    for(int i = 0; i < N; ++i)
     {
-        for(int i = 0; i < 9; ++i)
-            cout << board[j][i] << " ";
-        cout << "\n";
-    }
+        for(int j = 0; j < N; ++j)
+        {
+            cin >> Board[i][j];
+            if(!Board[i][j]) Empty.push_back({i, j});
+        }
+    }    
+    dfs(0);
 
     return 0;
 }
+
