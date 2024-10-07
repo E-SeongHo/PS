@@ -1,34 +1,46 @@
 #include <iostream>
 #include <vector>
+#include <queue>
 #include <algorithm>
 #include <numeric>
 
 using namespace std;
 
 int N, M;
-vector<long long> Cards;
+priority_queue<long long, vector<long long>, greater<long long>> PQ;
 
 int main()
 {
     ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-
+    cin.tie(nullptr); cout.tie(nullptr);
+    
     cin >> N >> M;
-    Cards.resize(N);
+    // O(NlogN)
     for(int i = 0; i < N; ++i)
-        cin >> Cards[i];
+    {
+        int n;
+        cin >> n;
+        PQ.push(n);
+    }
 
-    // O(M * NlogN)
+    // O(4MlogN)
     for(int i = 0; i < M; ++i)
     {
-        sort(Cards.begin(), Cards.end());
+        long long a = PQ.top(); PQ.pop();
+        long long b = PQ.top(); PQ.pop();
 
-        long long sum = Cards[0] + Cards[1];
-        Cards[0] = sum;
-        Cards[1] = sum;
+        PQ.push(a+b);
+        PQ.push(a+b);
     }
-    
-    cout << accumulate(Cards.begin(), Cards.end(), 0ll);
+
+    // O(NlogN)
+    long long sum = 0;
+    while(!PQ.empty())
+    {
+        sum += PQ.top(); PQ.pop();
+    }
+
+    cout << sum;
 
     return 0;
 }
