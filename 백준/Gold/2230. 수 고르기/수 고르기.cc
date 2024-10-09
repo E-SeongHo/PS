@@ -6,6 +6,41 @@ using namespace std;
 
 int N, M;
 vector<int> V;
+
+int binary()
+{
+    int ret = 2147483647;
+    for(int i = 0; i < V.size(); ++i)
+    {
+        auto it = lower_bound(V.begin(), V.end(), V[i]+M);
+
+        if(it != V.end()) ret = min(ret, *it - V[i]);
+    }
+
+    return ret;
+}
+
+int two_pointers()
+{
+    int ret = 2147483647;
+    
+    int l = 0;
+    int r = 0;
+
+    while(l < N && r < N)
+    {
+        if(V[r] - V[l] >= M) 
+        {
+            ret = min(ret, V[r] - V[l]);
+            l++;
+            continue;
+        }
+        else r++;
+    }
+
+    return ret;
+}
+
 int main()
 {
     ios::sync_with_stdio(false);
@@ -18,15 +53,7 @@ int main()
 
     sort(V.begin(), V.end());
 
-    int ret = 2147483647;
-    for(int i = 0; i < V.size(); ++i)
-    {
-        auto it = lower_bound(V.begin(), V.end(), V[i]+M);
-
-        if(it != V.end()) ret = min(ret, *it - V[i]);
-    }
-
-    cout << ret;
+    cout << two_pointers();
 
     return 0;
 }
