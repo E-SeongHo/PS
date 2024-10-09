@@ -1,52 +1,47 @@
 #include <iostream>
 #include <vector>
-#include <numeric>
+#include <deque>
 
 using namespace std;
 
-int N; // 1 <= N <= 200,000 
-vector<int> Fruits; // 1 ~ 9
-vector<int> Table;
+int N;
+vector<int> V;
+vector<int> Cnt;
 
 int main()
 {
     ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-    cout.tie(nullptr);
-
+    cin.tie(nullptr); cout.tie(nullptr);
+    
     cin >> N;
-    Fruits.resize(N);
+    V.resize(N); Cnt.resize(10, 0);
+    for(int i = 0; i < N; ++i)
+        cin >> V[i];
 
-    for(int i = 0; i < N; i++)
+    int l = 0;
+    int r = 0;
+    Cnt[V[r]]++;
+    int ret = 0;
+    
+    while(r < N && l <= r)
     {
-        cin >> Fruits[i];
-    }
-
-    int ret = -1;
-    int ptr = 0;
-    vector<int> has(10, 0);
-
-    for(int i = 0; i < N; i++)
-    {
-        has[Fruits[i]]++;
-
         int cnt = 0;
-        for(int j = 1; j < 10; j++)
+        for(int n : Cnt) if(n) cnt++;
+
+        if(cnt > 2)
         {
-            if(has[j]) cnt++;
+            l++;
+            Cnt[V[l-1]]--;
         }
-
-        while(cnt > 2)
+        else
         {
-            has[Fruits[ptr]]--;
-            if(!has[Fruits[ptr]]) cnt--;
-
-            ptr++;
+            ret = max(ret, r-l+1);
+            r++;
+            Cnt[V[r]]++;
         }
-
-        ret = max(ret, accumulate(has.begin(), has.end(), 0));
     }
-
+    
     cout << ret;
+    
     return 0;
 }
