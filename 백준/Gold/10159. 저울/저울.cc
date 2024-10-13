@@ -1,71 +1,54 @@
 #include <iostream>
 #include <vector>
-#include <set>
 
 using namespace std;
 
 int N, M;
-vector<vector<int>> Smaller, Bigger;
-
-void visit_smaller(int cur, vector<bool>& visited)
-{
-    visited[cur] = true;
-
-    for(int n : Smaller[cur])
-    {
-        if(!visited[n]) visit_smaller(n, visited);
-    }
-}
-
-void visit_bigger(int cur, vector<bool>& visited)
-{
-    visited[cur] = true;
-
-    for(int n : Bigger[cur])
-    {
-        if(!visited[n]) visit_bigger(n, visited);
-    }
-}
+vector<vector<int>> Map;
+constexpr int INF = 99999999;
 
 int main()
 {
     ios::sync_with_stdio(false);
     cin.tie(nullptr); cout.tie(nullptr);
     
-    cin >> N >> M;
-    Smaller.resize(N+1); Bigger.resize(N+1);
+    cin >> N;
+    Map.resize(N+1, vector<int>(N+1, INF));
 
+    cin >> M;
     for(int i = 0; i < M; ++i)
     {
         int a, b;
         cin >> a >> b;
-        Smaller[b].push_back(a);
-        Bigger[a].push_back(b);
+        Map[a][b] = 1;
     }
 
+    for(int k = 1; k < N+1; ++k)
+    {
+        for(int i = 1; i < N+1; ++i)
+        {
+            for(int j = 1; j < N+1; ++j)
+            {
+                Map[i][j] = min(Map[i][j], Map[i][k] + Map[k][j]);
+            }
+        }
+    }
+
+    vector<int> ans(N+1, 0);
     for(int i = 1; i < N+1; ++i)
     {
-        vector<bool> v(N+1, false);
-        visit_smaller(i, v);
-        
-        int smaller = 0;
-        for(int i = 1; i < N+1; ++i)
+        for(int j = 1; j < N+1; ++j)
         {
-            if(v[i]) smaller++;
+            if(i == j) continue;
+
+            if(Map[i][j] != INF || Map[j][i] != INF)
+            {
+                ans[i]++;
+            }
         }
 
-        fill(v.begin(), v.end(), false);
-        visit_bigger(i, v);
-
-        int bigger = 0;
-        for(int i = 1; i < N+1; ++i)
-        {
-            if(v[i]) bigger++;
-        }
-
-        cout << N-1 - (smaller + bigger - 2) << '\n';
+        cout << N-1 - ans[i] << '\n';
     }
-
 
     return 0;
 }
