@@ -27,6 +27,7 @@ int main()
         for(int time : Time)
         {
             cnt += (mid / time);
+            if(cnt >= M) break;
         }
 
         if(cnt >= M) r = mid;
