@@ -6,7 +6,7 @@ using namespace std;
 int N;
 vector<vector<int>> W;
 vector<vector<int>> DP;
-constexpr int INF = 1000000000;
+constexpr int INF = 16000001;
 
 int dfs(int start, int visit)
 {
