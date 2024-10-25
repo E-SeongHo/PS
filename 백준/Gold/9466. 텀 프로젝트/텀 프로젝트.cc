@@ -4,21 +4,34 @@
 using namespace std;
 
 int T, N;
+vector<int> Wants;
+vector<vector<int>> Cycles;
 
-void dfs(int cur, vector<bool>& visited, vector<vector<int>>& edge, vector<int>& order)
+void dfs(int cur, vector<int>& prev, vector<bool>& discovered, vector<bool>& visited)
 {
-    if(cur == 0) return;
-    visited[cur] = true;
-
-    for(int n : edge[cur])
+    if(discovered[cur] && !visited[cur])
     {
-        if(n != cur && !visited[n])
+        vector<int> cycle;
+        int tmp = prev[cur];
+        while(tmp != cur)
         {
-            dfs(n, visited, edge, order);
+            cycle.push_back(tmp);
+            tmp = prev[tmp];
         }
+        cycle.push_back(cur);
+
+        Cycles.push_back(cycle);
+        return;
     }
 
-    order.push_back(cur);
+    discovered[cur] = true;
+    if(!visited[Wants[cur]])
+    {
+        prev[Wants[cur]] = cur;
+        dfs(Wants[cur], prev, discovered, visited);
+    }
+
+    visited[cur] = true;
 }
 
 int main()
@@ -30,49 +43,30 @@ int main()
     for(int t = 0; t < T; ++t)
     {
         cin >> N;
-        vector<vector<int>> edge(N+1);
-        vector<vector<int>> reverse(N+1);
+        Wants.resize(0); Wants.resize(N+1);
+        Cycles.resize(0);
 
         for(int i = 1; i < N+1; ++i)
-        {
-            int n;
-            cin >> n;
-            edge[i].push_back(n);
-            reverse[n].push_back(i);
-        }
+            cin >> Wants[i];
 
         vector<bool> visited(N+1, false);
-        vector<int> order;
+        vector<bool> discovered(N+1, false);
+        vector<int> prev(N+1, -1);
         for(int i = 1; i < N+1; ++i)
         {
-            if(visited[i]) continue;
-            dfs(i, visited, edge, order);
-        }
-
-        vector<vector<int>> scc;
-        fill(visited.begin(), visited.end(), false);
-
-        for(auto it = order.rbegin(); it != order.rend(); ++it)
-        {
-            vector<int> tmp_order;
-            if(visited[*it]) continue;
-
-            dfs(*it, visited, reverse, tmp_order);
-
-            scc.push_back(tmp_order);
-        }
-
-        int cnt = 0;
-        for(vector<int>& c : scc)
-        {
-            if(c.size() == 1)
+            if(!visited[i]) 
             {
-                if(edge[c[0]][0] != c[0]) cnt++;
+                dfs(i, prev, discovered, visited);
             }
         }
 
-        cout << cnt << '\n';
+        int ans = N;
+        for(vector<int>& cycle : Cycles)
+        {
+            ans -= cycle.size();
+        }
+        
+        cout << ans << '\n';
     }
-
     return 0;
 }
