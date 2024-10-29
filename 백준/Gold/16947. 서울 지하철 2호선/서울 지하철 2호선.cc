@@ -6,42 +6,44 @@ using namespace std;
 
 int N;
 vector<vector<int>> Edges;
-vector<bool> Discovered;
+vector<bool> OnStack;
 vector<bool> Visited;
 vector<int> Prev;
 
+
 vector<bool> Cycle;
+bool cycle_detected_flag = false;
 
-int Cnt = 0;
-void dfs(int cur, int prev)
+void dfs(int cur)
 {
-    if(Discovered[cur] && !Visited[cur])
-    {
-        Cnt++;
-        if(Cnt == 2) exit(-1);
+	Visited[cur] = true;
+	OnStack[cur] = true;
 
-        int tmp = prev;
-        while(tmp != cur)
-        {
-            Cycle[tmp] = true;
-            tmp = Prev[tmp];
-        }
-        Cycle[tmp] = true;
-        return;
-    }
+	for(int neighbor : Edges[cur])
+	{
+		//if(cycle_detected_flag) return;
+		if(neighbor == Prev[cur]) continue;
+		
+		if(!Visited[neighbor])
+		{
+			Prev[neighbor] = cur;
+			dfs(neighbor);
+		}
+		else if(OnStack[neighbor])
+		{
+			cycle_detected_flag = true;
+			
+			int vertex = cur;
+			while(vertex != neighbor)
+			{
+				Cycle[vertex] = true;
+				vertex = Prev[vertex];
+			}
+            Cycle[vertex] = true;
+		}	
+	}
 
-    Discovered[cur] = true;
-
-    for(int vertex : Edges[cur])
-    {
-        if(vertex == prev) continue;
-        if(Visited[vertex]) continue;
-
-        Prev[vertex] = cur;
-        dfs(vertex, cur);
-    }
-
-    Visited[cur] = true;
+	OnStack[cur] = false;
 }
 
 int main()
@@ -51,7 +53,7 @@ int main()
     
     cin >> N;
     Edges.resize(N+1);
-    Discovered.resize(N+1, false);
+    OnStack.resize(N+1, false);
     Visited.resize(N+1, false);
     Prev.resize(N+1, -1);
 
@@ -65,15 +67,7 @@ int main()
 
     Cycle.resize(N+1);
     int components = 0;
-    for(int i = 1; i < N+1; ++i)
-    {
-        if(!Visited[i]) 
-        {
-            dfs(i, -1);
-            components++;
-            if(components == 2) exit(-1);
-        }
-    }
+    dfs(1);
 
     vector<int> ans(N+1, 0);
 
