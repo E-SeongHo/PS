@@ -12,21 +12,20 @@ vector<int> Prev;
 
 vector<bool> Cycle;
 
-bool flag = false;
-void dfs(int cur)
+int Cnt = 0;
+void dfs(int cur, int prev)
 {
-    if(Discovered[cur] && !Visited[cur] && !flag)
+    if(Discovered[cur] && !Visited[cur])
     {
-        flag = true;
-        // cout << "detect cycle" << endl;
-        int tmp = Prev[cur];
+        Cnt++;
+        if(Cnt == 2) exit(-1);
+
+        int tmp = prev;
         while(tmp != cur)
         {
-            //cout << tmp << " -> ";
             Cycle[tmp] = true;
             tmp = Prev[tmp];
         }
-        //cout << tmp << endl;
         Cycle[tmp] = true;
         return;
     }
@@ -35,11 +34,11 @@ void dfs(int cur)
 
     for(int vertex : Edges[cur])
     {
-        if(vertex == Prev[cur]) continue;
+        if(vertex == prev) continue;
         if(Visited[vertex]) continue;
 
         Prev[vertex] = cur;
-        dfs(vertex);
+        dfs(vertex, cur);
     }
 
     Visited[cur] = true;
@@ -65,9 +64,15 @@ int main()
     }
 
     Cycle.resize(N+1);
+    int components = 0;
     for(int i = 1; i < N+1; ++i)
     {
-        if(!Visited[i]) dfs(i);
+        if(!Visited[i]) 
+        {
+            dfs(i, -1);
+            components++;
+            if(components == 2) exit(-1);
+        }
     }
 
     vector<int> ans(N+1, 0);
