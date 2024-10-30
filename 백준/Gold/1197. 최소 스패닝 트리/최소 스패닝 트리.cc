@@ -14,7 +14,7 @@ int find(int e)
 {
     if(DisjointSet[e] == e) return e;
 
-    else return find(DisjointSet[e]);
+    return DisjointSet[e] = find(DisjointSet[e]);
 }
 
 void union_set(int s1, int s2)
