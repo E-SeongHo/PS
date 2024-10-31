@@ -22,25 +22,32 @@ int main()
     for(int i = 1; i < N+1; ++i)
         cin >> Cost[i];
 
-    vector<int> dp(M+1, 200000000);
-    dp[0] = 0;
+    vector<vector<int>> dp(N+1, vector<int>(100 * N + 1, 0));
 
+    // dp[N][C] : N개까지 고려해서, Cost이하 사용하는 Memory 최댓값
     for(int i = 1; i < N+1; ++i)
     {
-        vector<int> prev = dp;
-        for(int j = 1; j < M+1; ++j)
+        for(int c = 0; c < dp[0].size(); ++c)
         {
-            if(j >= Taken[i])
+            if(Cost[i] <= c)
             {
-                dp[j] = min(prev[j], prev[j-Taken[i]] + Cost[i]);
+                dp[i][c] = max(dp[i-1][c-Cost[i]] + Taken[i], dp[i-1][c]);
             }
             else
             {
-                dp[j] = min(prev[j], Cost[i]);
+                dp[i][c] = dp[i-1][c];
             }
         }
     }
 
-    cout << dp[M];
+    for(int i = 0; i < dp[0].size(); ++i)
+    {
+        if(dp[N][i] >= M)
+        {
+            cout << i;
+            break;
+        }
+    }
+
     return 0;
 }
