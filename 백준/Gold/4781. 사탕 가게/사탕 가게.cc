@@ -46,20 +46,31 @@ int main()
         //         }
         //     }
         // }
+        // cout << dp[N][M] << '\n';
 
-        vector<int> d(M+1, 0);
-        for(int i = 1; i <= M; i++)
+        vector<int> dp2(M+1, 0);
+        for(int i = 1; i <= N; i++)
         {
-            for(int j = 1; j <= N; j++)
+            for(int j = price[i]; j <= M; j++)
             {
-                if(i-price[j] >= 0)
-                {
-                    d[i] = max(d[i], d[i-price[j]] + calorie[j]);
-                }
+                dp2[j] = max(dp2[j], dp2[j-price[i]] + calorie[i]);
             }
         }
-        cout << d[M] << '\n';
-        //cout << dp[N][M] << '\n';
+
+        cout << dp2[M] << '\n';
+
+        // vector<int> d(M+1, 0);
+        // for(int i = 1; i <= M; i++)
+        // {
+        //     for(int j = 1; j <= N; j++)
+        //     {
+        //         if(i-price[j] >= 0)
+        //         {
+        //             d[i] = max(d[i], d[i-price[j]] + calorie[j]);
+        //         }
+        //     }
+        // }
+        // cout << d[M] << '\n';
     }
 
     return 0;
